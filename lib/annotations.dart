@@ -1,0 +1,3 @@
+class RxViewModel {
+  const RxViewModel();
+}
