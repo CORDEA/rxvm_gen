@@ -13,7 +13,10 @@ class RxVmGenerator extends GeneratorForAnnotation<RxViewModel> {
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
-    return 'void dispose() {}';
+    if (element.kind != ElementKind.CLASS) {
+      return;
+    }
+    return 'extension _${element.name}Ext on ${element.name} {}';
   }
 }
 
