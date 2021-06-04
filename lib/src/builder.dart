@@ -4,7 +4,7 @@ import 'package:rxvm_gen/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 Builder rxVmBuilder(BuilderOptions options) =>
-    SharedPartBuilder([RxVmGenerator()], 'rxvm');
+    SharedPartBuilder([RxVmGenerator(), SubjectGenerator()], 'rxvm');
 
 class RxVmGenerator extends GeneratorForAnnotation<RxViewModel> {
   @override
@@ -14,5 +14,16 @@ class RxVmGenerator extends GeneratorForAnnotation<RxViewModel> {
     BuildStep buildStep,
   ) {
     return 'void dispose() {}';
+  }
+}
+
+class SubjectGenerator extends GeneratorForAnnotation<VisibleSubject> {
+  @override
+  generateForAnnotatedElement(
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
+    return '';
   }
 }
