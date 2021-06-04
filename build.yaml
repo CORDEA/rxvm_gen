@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      rxvm_gen|rxVmBuilder:
+        generate_for:
+          - example/**.dart
+
+builders:
+  rxVmBuilder:
+    import: "package:rxvm_gen/src/builder.dart"
+    builder_factories: [ "rxVmBuilder" ]
+    build_extensions: { ".dart": [ "rxvm.g.part" ] }
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: [ "source_gen|combining_builder" ]
