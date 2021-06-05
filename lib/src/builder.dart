@@ -1,4 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/nullability_suffix.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
 import 'package:rxvm_gen/annotations.dart';
@@ -20,6 +22,25 @@ class RxVmGenerator extends GeneratorForAnnotation<RxViewModel> {
     final visitor = _VisibleSubjectVisitor();
     element.visitChildren(visitor);
     var ext = 'extension _${element.name}Ext on ${element.name} {\n';
+
+    for (final e in visitor.elements) {
+      final type = e.type;
+      if (type is! ParameterizedType) {
+        continue;
+      }
+      if (type.element?.name != 'BehaviorSubject') {
+        continue;
+      }
+      final childType = type.typeArguments.first;
+      final typeSuffix =
+          childType.nullabilitySuffix == NullabilitySuffix.question ? '?' : '';
+      final typeName = childType.element?.name;
+      if (typeName == null) {
+        continue;
+      }
+      ext +=
+          'ValueStream<$typeName$typeSuffix> get ${e.name.substring(1)} => ${e.name};\n';
+    }
 
     return ext + '\n}';
   }
