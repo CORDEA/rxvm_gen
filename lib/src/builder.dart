@@ -42,7 +42,29 @@ class RxVmGenerator extends GeneratorForAnnotation<RxViewModel> {
           'ValueStream<$typeName$typeSuffix> get ${e.name.substring(1)} => ${e.name};\n';
     }
 
+    ext += 'void _dispose() {\n';
+    for (final e in visitor.elements) {
+      final type = e.type.element;
+      if (type == null || type is! ClassElement) {
+        continue;
+      }
+      if (isSink(type)) {
+        ext += '${e.name}.close();\n';
+      }
+    }
+    ext += '}\n';
+
     return ext + '\n}';
+  }
+
+  bool isSink(Element e) {
+    if (e is! ClassElement) {
+      return false;
+    }
+    if (e.name == 'Sink') {
+      return true;
+    }
+    return e.allSupertypes.any((element) => isSink(element.element));
   }
 }
 
