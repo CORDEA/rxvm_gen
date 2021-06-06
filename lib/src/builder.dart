@@ -7,7 +7,7 @@ import 'package:rxvm_gen/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 Builder rxVmBuilder(BuilderOptions options) =>
-    SharedPartBuilder([RxVmGenerator(), SubjectGenerator()], 'rxvm');
+    SharedPartBuilder([RxVmGenerator()], 'rxvm');
 
 class RxVmGenerator extends GeneratorForAnnotation<RxViewModel> {
   @override
@@ -79,16 +79,5 @@ class _VisibleSubjectVisitor extends SimpleElementVisitor {
       elements.add(element);
     }
     return super.visitFieldElement(element);
-  }
-}
-
-class SubjectGenerator extends GeneratorForAnnotation<VisibleSubject> {
-  @override
-  generateForAnnotatedElement(
-    Element element,
-    ConstantReader annotation,
-    BuildStep buildStep,
-  ) {
-    return '';
   }
 }
